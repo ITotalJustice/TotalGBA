@@ -22,21 +22,21 @@ General Internal Memory
 
 /* bios reads */
 static inline uint8_t bios_read8(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x00003FFF) {
+    if (/*addr >= BIOS_BEGIN &&*/ addr <= BIOS_END) {
         assert(0 && "bios not implemented!");
     }
     return 0xFF; // unused
 }
 
 static inline uint16_t bios_read16(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x00003FFF) {
+    if (/*addr >= BIOS_BEGIN &&*/ addr <= BIOS_END) {
         assert(0 && "bios not implemented!");
     }
     return 0xFF; // unused
 }
 
 static inline uint32_t bios_read32(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x00003FFF) {
+    if (/*addr >= BIOS_BEGIN &&*/ addr <= BIOS_END) {
         assert(0 && "bios not implemented!");
     }
     return 0xFF; // unused
@@ -44,44 +44,44 @@ static inline uint32_t bios_read32(struct GBA_Core* gba, uint32_t addr) {
 
 /* ewram reads */
 static inline uint8_t ewram_read8(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x01FFFFFF) {
-        return read_array8(MMIO.ewram, addr, 0x3FFFF);
+    if (addr >= EWRAM_BEGIN && addr <= EWRAM_END) {
+        return read_array8(MMIO.ewram, addr, EWRAM_MASK);
     }
     return 0xFF; // unused
 }
 
 static inline uint16_t ewram_read16(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x01FFFFFF) {
-        return read_array16(MMIO.ewram, addr, 0x3FFFF);
+    if (addr >= EWRAM_BEGIN && addr <= EWRAM_END) {
+        return read_array16(MMIO.ewram, addr, EWRAM_MASK);
     }
     return 0xFF; // unused
 }
 
 static inline uint32_t ewram_read32(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x01FFFFFF) {
-        return read_array32(MMIO.ewram, addr, 0x3FFFF);
+    if (addr >= EWRAM_BEGIN && addr <= EWRAM_END) {
+        return read_array32(MMIO.ewram, addr, EWRAM_MASK);
     }
     return 0xFF; // unused
 }
 
 /* iwram reads */
 static inline uint8_t iwram_read8(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x03007FFF) {
-        return read_array8(MMIO.iwram, addr, 0x7FFF);
+    if (addr >= IWRAM_BEGIN && addr <= IWRAM_END) {
+        return read_array8(MMIO.iwram, addr, IWRAM_MASK);
     }
     return 0xFF; // unused
 }
 
 static inline uint16_t iwram_read16(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x03007FFF) {
-        return read_array16(MMIO.iwram, addr, 0x7FFF);
+    if (addr >= IWRAM_BEGIN && addr <= IWRAM_END) {
+        return read_array16(MMIO.iwram, addr, IWRAM_MASK);
     }
     return 0xFF; // unused
 }
 
 static inline uint32_t iwram_read32(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x03007FFF) {
-        return read_array32(MMIO.iwram, addr, 0x7FFF);
+    if (addr >= IWRAM_BEGIN && addr <= IWRAM_END) {
+        return read_array32(MMIO.iwram, addr, IWRAM_MASK);
     }
     return 0xFF; // unused
 }

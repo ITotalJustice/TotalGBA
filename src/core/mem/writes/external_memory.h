@@ -19,20 +19,20 @@ External Memory (Game Pak)
 
 /* sram writes */
 static inline void sram_write8(struct GBA_Core* gba, const uint32_t addr, const uint8_t value) {
-    if (addr <= 0x0E00FFFF) {
-        write_array8(MMIO.sram, addr, value, 0xFFFF);
+    if (addr >= SRAM_BEGIN && addr <= SRAM_END) {
+        write_array8(MMIO.sram, addr, value, SRAM_MASK);
     }
 }
 
 static inline void sram_write16(struct GBA_Core* gba, const uint32_t addr, const uint16_t value) {
-    if (addr <= 0x0E00FFFF) {
-        write_array16(MMIO.sram, addr, value, 0xFFFF);
+    if (addr >= SRAM_BEGIN && addr <= SRAM_END) {
+        write_array16(MMIO.sram, addr, value, SRAM_MASK);
     }
 }
 
 static inline void sram_write32(struct GBA_Core* gba, const uint32_t addr, const uint32_t value) {
-    if (addr <= 0x0E00FFFF) {
-        write_array32(MMIO.sram, addr, value, 0xFFFF);
+    if (addr >= SRAM_BEGIN && addr <= SRAM_END) {
+        write_array32(MMIO.sram, addr, value, SRAM_MASK);
     }
 }
 

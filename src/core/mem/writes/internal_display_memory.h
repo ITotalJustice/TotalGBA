@@ -21,58 +21,58 @@ Internal Display Memory
 
 /* palette_ram writes */
 static inline void palette_ram_write8(struct GBA_Core* gba, const uint32_t addr, const uint8_t value) {
-    if (addr <= 0x050003FF) {
-        write_array8(MMIO.palette_ram, addr, value, 0x3FF);
+    if (addr >= PALETTE_RAM_BEGIN && addr <= PALETTE_RAM_END) {
+        write_array8(MMIO.palette_ram, addr, value, PALETTE_RAM_MASK);
     }
 }
 
 static inline void palette_ram_write16(struct GBA_Core* gba, const uint32_t addr, const uint16_t value) {
-    if (addr <= 0x050003FF) {
-        write_array16(MMIO.palette_ram, addr, value, 0x3FF);
+    if (addr >= PALETTE_RAM_BEGIN && addr <= PALETTE_RAM_END) {
+        write_array16(MMIO.palette_ram, addr, value, PALETTE_RAM_MASK);
     }
 }
 
 static inline void palette_ram_write32(struct GBA_Core* gba, const uint32_t addr, const uint32_t value) {
-    if (addr <= 0x050003FF) {
-        write_array32(MMIO.palette_ram, addr, value, 0x3FF);
+    if (addr >= PALETTE_RAM_BEGIN && addr <= PALETTE_RAM_END) {
+        write_array32(MMIO.palette_ram, addr, value, PALETTE_RAM_MASK);
     }
 }
 
 /* vram writes */
 static inline void vram_write8(struct GBA_Core* gba, const uint32_t addr, const uint8_t value) {
-    if (addr <= 0x06017FFF) {
-        write_array8(MMIO.vram, addr, value, 0x17FFF);
+    if (addr >= VRAM_BEGIN && addr <= VRAM_END) {
+        write_array8(MMIO.vram, addr, value, VRAM_MASK);
     }
 }
 
 static inline void vram_write16(struct GBA_Core* gba, const uint32_t addr, const uint16_t value) {
-    if (addr <= 0x06017FFF) {
-        write_array16(MMIO.vram, addr, value, 0x17FFF);
+    if (addr >= VRAM_BEGIN && addr <= VRAM_END) {
+        write_array16(MMIO.vram, addr, value, VRAM_MASK);
     }
 }
 
 static inline void vram_write32(struct GBA_Core* gba, const uint32_t addr, const uint32_t value) {
-    if (addr <= 0x06017FFF) {
-        write_array32(MMIO.vram, addr, value, 0x17FFF);
+    if (addr >= VRAM_BEGIN && addr <= VRAM_END) {
+        write_array32(MMIO.vram, addr, value, VRAM_MASK);
     }
 }
 
 /* oam writes */
 static inline void oam_write8(struct GBA_Core* gba, const uint32_t addr, const uint8_t value) {
-    if (addr <= 0x070003FF) {
-        write_array8(MMIO.oam, addr, value, 0x3FF);
+    if (addr >= OAM_BEGIN && addr <= OAM_END) {
+        write_array8(MMIO.oam, addr, value, OAM_MASK);
     }
 }
 
 static inline void oam_write16(struct GBA_Core* gba, const uint32_t addr, const uint16_t value) {
-    if (addr <= 0x070003FF) {
-        write_array16(MMIO.oam, addr, value, 0x3FF);
+    if (addr >= OAM_BEGIN && addr <= OAM_END) {
+        write_array16(MMIO.oam, addr, value, OAM_MASK);
     }
 }
 
 static inline void oam_write32(struct GBA_Core* gba, const uint32_t addr, const uint32_t value) {
-    if (addr <= 0x070003FF) {
-        write_array32(MMIO.oam, addr, value, 0x3FF);
+    if (addr >= OAM_BEGIN && addr <= OAM_END) {
+        write_array32(MMIO.oam, addr, value, OAM_MASK);
     }
 }
 

@@ -19,44 +19,44 @@ External Memory (Game Pak)
 
 /* rom reads */
 static inline uint8_t rom_read8(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x09FFFFFF) {
-        return read_array8(MMIO.rom, addr, 0x1FFFFFF);
+    if (addr >= ROM1_BEGIN && addr <= ROM3_END) {
+        return read_array8(MMIO.rom, addr, ROM_MASK);
     }
     return 0xFF; // unused
 }
 
 static inline uint16_t rom_read16(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x09FFFFFF) {
-        return read_array16(MMIO.rom, addr, 0x1FFFFFF);
+    if (addr >= ROM1_BEGIN && addr <= ROM3_END) {
+        return read_array16(MMIO.rom, addr, ROM_MASK);
     }
     return 0xFF; // unused
 }
 
 static inline uint32_t rom_read32(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x09FFFFFF) {
-        return read_array32(MMIO.rom, addr, 0x1FFFFFF);
+    if (addr >= ROM1_BEGIN && addr <= ROM3_END) {
+        return read_array32(MMIO.rom, addr, ROM_MASK);
     }
     return 0xFF; // unused
 }
 
 /* sram reads */
 static inline uint8_t sram_read8(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x0E00FFFF) {
-        return read_array8(MMIO.sram, addr, 0xFFFF);
+    if (addr >= SRAM_BEGIN && addr <= SRAM_END) {
+        return read_array8(MMIO.sram, addr, SRAM_MASK);
     }
     return 0xFF; // unused
 }
 
 static inline uint16_t sram_read16(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x0E00FFFF) {
-        return read_array16(MMIO.sram, addr, 0xFFFF);
+    if (addr >= SRAM_BEGIN && addr <= SRAM_END) {
+        return read_array16(MMIO.sram, addr, SRAM_MASK);
     }
     return 0xFF; // unused
 }
 
 static inline uint32_t sram_read32(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x0E00FFFF) {
-        return read_array32(MMIO.sram, addr, 0xFFFF);
+    if (addr >= SRAM_BEGIN && addr <= SRAM_END) {
+        return read_array32(MMIO.sram, addr, SRAM_MASK);
     }
     return 0xFF; // unused
 }

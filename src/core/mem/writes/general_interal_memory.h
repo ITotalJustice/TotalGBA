@@ -22,39 +22,39 @@ General Internal Memory
 
 /* ewram writes */
 static inline void ewram_write8(struct GBA_Core* gba, const uint32_t addr, const uint8_t value) {
-    if (addr <= 0x01FFFFFF) {
-        write_array8(MMIO.ewram, addr, value, 0x3FFFF);
+    if (addr >= EWRAM_BEGIN && addr <= EWRAM_END) {
+        write_array8(MMIO.ewram, addr, value, EWRAM_MASK);
     }
 }
 
 static inline void ewram_write16(struct GBA_Core* gba, const uint32_t addr, const uint16_t value) {
-    if (addr <= 0x01FFFFFF) {
-        write_array16(MMIO.ewram, addr, value, 0x3FFFF);
+    if (addr >= EWRAM_BEGIN && addr <= EWRAM_END) {
+        write_array16(MMIO.ewram, addr, value, EWRAM_MASK);
     }
 }
 
 static inline void ewram_write32(struct GBA_Core* gba, const uint32_t addr, const uint32_t value) {
-    if (addr <= 0x01FFFFFF) {
-        write_array32(MMIO.ewram, addr, value, 0x3FFFF);
+    if (addr >= EWRAM_BEGIN && addr <= EWRAM_END) {
+        write_array32(MMIO.ewram, addr, value, EWRAM_MASK);
     }
 }
 
 /* iwram writes */
 static inline void iwram_write8(struct GBA_Core* gba, const uint32_t addr, const uint8_t value) {
-    if (addr <= 0x03007FFF) {
-        write_array8(MMIO.iwram, addr, value, 0x7FFF);
+    if (addr >= IWRAM_BEGIN && addr <= IWRAM_END) {
+        write_array8(MMIO.iwram, addr, value, IWRAM_MASK);
     }
 }
 
 static inline void iwram_write16(struct GBA_Core* gba, const uint32_t addr, const uint16_t value) {
-    if (addr <= 0x03007FFF) {
-        write_array16(MMIO.iwram, addr, value, 0x7FFF);
+    if (addr >= IWRAM_BEGIN && addr <= IWRAM_END) {
+        write_array16(MMIO.iwram, addr, value, IWRAM_MASK);
     }
 }
 
 static inline void iwram_write32(struct GBA_Core* gba, const uint32_t addr, const uint32_t value) {
-    if (addr <= 0x03007FFF) {
-        write_array32(MMIO.iwram, addr, value, 0x7FFF);
+    if (addr >= IWRAM_BEGIN && addr <= IWRAM_END) {
+        write_array32(MMIO.iwram, addr, value, IWRAM_MASK);
     }
 }
 

@@ -21,66 +21,66 @@ Internal Display Memory
 
 /* palette_ram reads */
 static inline uint8_t palette_ram_read8(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x050003FF) {
-        return read_array8(MMIO.palette_ram, addr, 0x3FF);
+    if (addr >= PALETTE_RAM_BEGIN && addr <= PALETTE_RAM_END) {
+        return read_array8(MMIO.palette_ram, addr, PALETTE_RAM_MASK);
     }
     return 0xFF; // unused
 }
 
 static inline uint16_t palette_ram_read16(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x050003FF) {
-        return read_array16(MMIO.palette_ram, addr, 0x3FF);
+    if (addr >= PALETTE_RAM_BEGIN && addr <= PALETTE_RAM_END) {
+        return read_array16(MMIO.palette_ram, addr, PALETTE_RAM_MASK);
     }
     return 0xFF; // unused
 }
 
 static inline uint32_t palette_ram_read32(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x050003FF) {
-        return read_array32(MMIO.palette_ram, addr, 0x3FF);
+    if (addr >= PALETTE_RAM_BEGIN && addr <= PALETTE_RAM_END) {
+        return read_array32(MMIO.palette_ram, addr, PALETTE_RAM_MASK);
     }
     return 0xFF; // unused
 }
 
 /* vram reads */
 static inline uint8_t vram_read8(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x06017FFF) {
-        return read_array8(MMIO.vram, addr, 0x17FFF);
+    if (addr >= VRAM_BEGIN && addr <= VRAM_END) {
+        return read_array8(MMIO.vram, addr, VRAM_MASK);
     }
     return 0xFF; // unused
 }
 
 static inline uint16_t vram_read16(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x06017FFF) {
-        return read_array16(MMIO.vram, addr, 0x17FFF);
+    if (addr >= VRAM_BEGIN && addr <= VRAM_END) {
+        return read_array16(MMIO.vram, addr, VRAM_MASK);
     }
     return 0xFF; // unused
 }
 
 static inline uint32_t vram_read32(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x06017FFF) {
-        return read_array32(MMIO.vram, addr, 0x17FFF);
+    if (addr >= VRAM_BEGIN && addr <= VRAM_END) {
+        return read_array32(MMIO.vram, addr, VRAM_MASK);
     }
     return 0xFF; // unused
 }
 
 /* oam reads */
 static inline uint8_t oam_read8(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x070003FF) {
-        return read_array8(MMIO.oam, addr, 0x3FF);
+    if (addr >= OAM_BEGIN && addr <= OAM_END) {
+        return read_array8(MMIO.oam, addr, OAM_MASK);
     }
     return 0xFF; // unused
 }
 
 static inline uint16_t oam_read16(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x070003FF) {
-        return read_array16(MMIO.oam, addr, 0x3FF);
+    if (addr >= OAM_BEGIN && addr <= OAM_END) {
+        return read_array16(MMIO.oam, addr, OAM_MASK);
     }
     return 0xFF; // unused
 }
 
 static inline uint32_t oam_read32(struct GBA_Core* gba, uint32_t addr) {
-    if (addr <= 0x070003FF) {
-        return read_array32(MMIO.oam, addr, 0x3FF);
+    if (addr <= OAM_END) {
+        return read_array32(MMIO.oam, addr, OAM_MASK);
     }
     return 0xFF; // unused
 }
