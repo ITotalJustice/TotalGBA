@@ -33,6 +33,29 @@ static void print_header(const struct GBA_CartHeader* header) {
     fprintf(stdout, "\n");
 }
 
+static bool validate_header_logo(const struct GBA_CartHeader* header) {
+    return false;
+}
+
+static bool validate_header_fixed_value(const struct GBA_CartHeader* header) {
+    enum { FIXED_VALUE = 0x96 };
+    
+    return FIXED_VALUE == header->fixed_value;
+}
+
+static bool validate_header_checksum(const struct GBA_CartHeader* header) {
+    enum { OFFSET = 0xA0, SIZE = 0x1D };
+
+    const uint8_t* data = ((const uint8_t*)header) + OFFSET;
+    uint8_t hash = -0x19;
+
+    for (size_t i = 0; i < SIZE; ++i) {
+        hash -= data[i];
+    }
+
+    return hash == header->complement_check;
+}
+
 int GBA_loadrom_data(struct GBA_Core* gba, const uint8_t* data, size_t size) {
     assert(gba && data && size);
 
@@ -51,14 +74,22 @@ int GBA_loadrom_data(struct GBA_Core* gba, const uint8_t* data, size_t size) {
     // log the header to stdout
     print_header(header);
 
+    if (!validate_header_fixed_value(header)) {
+        fprintf(stderr, "[ERROR] invalid header fixed_value!\n");
+        return -1;
+    }
+
+    if (!validate_header_checksum(header)) {
+        fprintf(stderr, "[ERROR] invalid header checksum!\n");
+        return -1;
+    }
+
     // todo:
     // - check header is valid
     // - save rom size for mask!
     // - get sram type (if any)
     // - load sram
-    // - validate header hash
     // - validate entire rom hash
-    // - validate fixed value
     // - validate nintendo logo (using my own hash)
 
     // reset the system, ready to load the new game.
