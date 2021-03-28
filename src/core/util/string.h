@@ -5,7 +5,6 @@ extern "C" {
 #endif
 
 #include <stddef.h>
-#include <stdint.h>
 
 
 // simple impl of strstr but with size param passed in

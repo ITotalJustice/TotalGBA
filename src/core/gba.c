@@ -58,31 +58,53 @@ static bool validate_header_checksum(const struct GBA_CartHeader* header) {
     return hash == header->complement_check;
 }
 
-static void log_sram_type(const uint8_t* data, size_t size) {
+static enum SramType get_sram_type(const uint8_t* data, size_t size) {
     assert(data && size);
 
-    const char* sram_ids[] = {
-        "EEPROM_V",
-        "SRAM_V",
-        "FLASH_V",
-        "FLASH512_V",
-        "FLASH1M_V",
+    static const struct {
+        const char* str_id;
+        const enum SramType type;
+    } entries[] = {
+        {
+            .str_id = "EEPROM_V",
+            .type = SRAM_TYPE_EEPROM
+        },
+        {
+            .str_id = "SRAM_V",
+            .type = SRAM_TYPE_SRAM
+        },
+        {
+            .str_id = "FLASH_V",
+            .type = SRAM_TYPE_FLASH
+        },
+        {
+            .str_id = "FLASH512_V",
+            .type = SRAM_TYPE_FLASH512
+        },
+        {
+            .str_id = "FLASH1M_V",
+            .type = SRAM_TYPE_FLASH1M
+        }
     };
 
     const char* str = (const char*)data;
 
-    for (size_t i = 0; i < ARRAY_SIZE(sram_ids); ++i) {
-        // there is a much faster way of doing this,
-        // but for now this is much simpler.
-        const char* id = strstr_s(str, size, sram_ids[i], strlen(sram_ids[i]));
+    for (size_t i = 0; i < ARRAY_SIZE(entries); ++i) {
+        // there is a much faster way of doing this, but for now this works.
+        const char* id = strstr_s(
+            str, size, // rom data + size
+            entries[i].str_id, strlen(entries[i].str_id) // entry + size
+        );
+
         // check if we found it, if so, log it!
         if (id != NULL) {
-            fprintf(stdout, "\n[INFO] found sram type! %s\n", sram_ids[i]);
-            return;
+            fprintf(stdout, "\n[INFO] found sram type! %s\n", entries[i].str_id);
+            return entries[i].type;
         }
     }
 
     fprintf(stdout, "\n[INFO] failed to find a valid sram type...\n");
+    return SRAM_TYPE_NONE;
 }
 
 int GBA_loadrom_data(struct GBA_Core* gba, const uint8_t* data, size_t size) {
@@ -113,7 +135,7 @@ int GBA_loadrom_data(struct GBA_Core* gba, const uint8_t* data, size_t size) {
         return -1;
     }
 
-    log_sram_type(data, size);
+    get_sram_type(data, size);
 
     // todo:
     // - check header is valid

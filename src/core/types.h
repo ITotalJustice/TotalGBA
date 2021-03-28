@@ -281,6 +281,16 @@ struct IE {
     uint16_t game_pak : 1;
 };
 
+enum SramType {
+    SRAM_TYPE_NONE,
+
+    SRAM_TYPE_EEPROM,
+    SRAM_TYPE_SRAM,
+    SRAM_TYPE_FLASH,
+    SRAM_TYPE_FLASH512,
+    SRAM_TYPE_FLASH1M,
+};
+
 struct GBA_CartHeader {
     uint32_t rom_entry_point;
     uint8_t nintendo_logo[156];
