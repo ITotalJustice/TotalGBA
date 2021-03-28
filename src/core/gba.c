@@ -107,16 +107,16 @@ static enum SramType get_sram_type(const uint8_t* data, size_t size) {
     return SRAM_TYPE_NONE;
 }
 
-int GBA_loadrom_data(struct GBA_Core* gba, const uint8_t* data, size_t size) {
-    assert(gba && data && size);
+int GBA_loadrom_data(struct GBA_Core* gba, const uint8_t* data, size_t rom_size) {
+    assert(gba && data && rom_size);
 
-    if (size > MAX_ROM_SIZE) {
-        fprintf(stderr, "[ERROR] file-size is too big! got: 0x%llX want: 0x%X\n", size, MAX_ROM_SIZE);
+    if (rom_size > MAX_ROM_SIZE) {
+        fprintf(stderr, "[ERROR] rom_size is too big! got: 0x%llX want: 0x%X\n", rom_size, MAX_ROM_SIZE);
         return -1;
     }
 
-    if (size < sizeof(struct GBA_CartHeader)) {
-        fprintf(stderr, "[ERROR] file-size is too small for header! got: 0x%llX want: 0x%llX\n", size, sizeof(struct GBA_CartHeader));
+    if (rom_size < sizeof(struct GBA_CartHeader)) {
+        fprintf(stderr, "[ERROR] rom_size is too small for header! got: 0x%llX want: 0x%llX\n", rom_size, sizeof(struct GBA_CartHeader));
         return -1;
     }
 
@@ -135,21 +135,25 @@ int GBA_loadrom_data(struct GBA_Core* gba, const uint8_t* data, size_t size) {
         return -1;
     }
 
-    get_sram_type(data, size);
-
     // todo:
     // - check header is valid
-    // - save rom size for mask!
-    // - get sram type (if any)
     // - load sram
     // - validate entire rom hash
     // - validate nintendo logo (using my own hash)
+    // - validate entry point is in range
 
     // reset the system, ready to load the new game.
     GBA_reset(gba);
 
     // load the rom data!
-    memcpy(gba->mmio.rom, data, size);
+    memcpy(gba->mmio.rom, data, rom_size);
+
+    // save rom size
+    gba->cart.rom_size = rom_size;
+    // save sram type (if any)
+    gba->cart.sram_type = get_sram_type(data, rom_size);
+    // set entry point
+    gba->cpu.registers[REG_PC_INDEX] = header->rom_entry_point;
 
     return 0;
 }

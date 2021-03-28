@@ -364,9 +364,16 @@ struct GBA_Cpu {
     // todo: banked registers...
 };
 
+struct GBA_Cart {
+    size_t rom_size;
+    size_t sram_size;
+    enum SramType sram_type;
+};
+
 struct GBA_Core {
     struct GBA_Cpu cpu;
     struct GBA_Mmio mmio;
+    struct GBA_Cart cart;
 };
 
 #ifdef __cplusplus
