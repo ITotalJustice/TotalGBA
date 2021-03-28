@@ -56,3 +56,10 @@ dkms.conf
 build
 src/frontend
 src/libs
+
+# vs
+.vs
+packages
+Debug
+x64
+Release

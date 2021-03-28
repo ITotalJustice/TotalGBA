@@ -36,7 +36,7 @@ enum Arm7tdmiExceptionVectors {
     EXCEPTION_FIQ = 0x0000001C,
 };
 
-enum Arm7tdmicondition {
+enum Arm7tdmiCondition {
     COND_EQ = 0x0, // Z set
     COND_NE = 0x1, // Z clear
     COND_CS = 0x2, // C set
@@ -82,7 +82,7 @@ static inline void ARM7_set_flag(struct GBA_Core* gba, const enum Arm7tdmiFlag f
     }
 }
 
-static inline bool ARM7_get_cond(const struct GBA_Core* gba, const enum Arm7tdmicondition cond) {
+static inline bool ARM7_get_cond(const struct GBA_Core* gba, const enum Arm7tdmiCondition cond) {
     switch (cond) {
         case COND_EQ: return CPU.cpsr.Z;
         case COND_NE: return !CPU.cpsr.Z;
