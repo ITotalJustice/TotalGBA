@@ -1,9 +1,11 @@
-#include "gba.h"
-#include  "internal.h"
+#include "core/gba.h"
+#include "core/internal.h"
 
 #include "core/arm7tdmi/arm/arm_instruction_table.h"
 #include "core/arm7tdmi/thumb/thumb_instruction_table.h"
 #include "core/arm7tdmi/thumb/encoding_types.h"
+
+#include "core/util/string.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -56,6 +58,33 @@ static bool validate_header_checksum(const struct GBA_CartHeader* header) {
     return hash == header->complement_check;
 }
 
+static void log_sram_type(const uint8_t* data, size_t size) {
+    assert(data && size);
+
+    const char* sram_ids[] = {
+        "EEPROM_V",
+        "SRAM_V",
+        "FLASH_V",
+        "FLASH512_V",
+        "FLASH1M_V",
+    };
+
+    const char* str = (const char*)data;
+
+    for (size_t i = 0; i < ARRAY_SIZE(sram_ids); ++i) {
+        // there is a much faster way of doing this,
+        // but for now this is much simpler.
+        const char* id = strstr_s(str, size, sram_ids[i], strlen(sram_ids[i]));
+        // check if we found it, if so, log it!
+        if (id != NULL) {
+            fprintf(stdout, "\n[INFO] found sram type! %s\n", sram_ids[i]);
+            return;
+        }
+    }
+
+    fprintf(stdout, "\n[INFO] failed to find a valid sram type...\n");
+}
+
 int GBA_loadrom_data(struct GBA_Core* gba, const uint8_t* data, size_t size) {
     assert(gba && data && size);
 
@@ -83,6 +112,8 @@ int GBA_loadrom_data(struct GBA_Core* gba, const uint8_t* data, size_t size) {
         fprintf(stderr, "[ERROR] invalid header checksum!\n");
         return -1;
     }
+
+    log_sram_type(data, size);
 
     // todo:
     // - check header is valid

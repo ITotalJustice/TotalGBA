@@ -16,6 +16,7 @@ source = files([
     # core
     'src/core/gba.c',
     'src/core/mem/mmio.c',
+    'src/core/util/string.c',
     'src/core/dummy_main.cpp',
     
     # # frontend mgb++

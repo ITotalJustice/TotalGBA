@@ -340,8 +340,14 @@ struct GBA_Psr {
     uint8_t M : 5; // mode
 };
 
+enum {
+    REG_SP_INDEX = 13, // stack pointer
+    REG_LR_INDEX = 14, // gets set to r15 during branch and links
+    REG_PC_INDEX = 15, // bits 0-1 are zero in arm state, bit-0 is zero in thumb
+};
+
 struct GBA_Cpu {
-    uint32_t registers[15];
+    uint32_t registers[16];
     struct GBA_Psr cpsr;
     struct GBA_Psr spsr;
 
