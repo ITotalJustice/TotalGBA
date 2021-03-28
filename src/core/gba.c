@@ -1,10 +1,7 @@
 #include "core/gba.h"
 #include "core/internal.h"
 
-#include "core/arm7tdmi/arm/arm_instruction_table.h"
-#include "core/arm7tdmi/thumb/thumb_instruction_table.h"
-#include "core/arm7tdmi/thumb/encoding_types.h"
-
+#include "core/arm7tdmi/arm7tdmi.h"
 #include "core/util/string.h"
 
 #include <stdio.h>
@@ -19,6 +16,8 @@ void GBA_init(struct GBA_Core* gba) {
 
 void GBA_reset(struct GBA_Core* gba) {
     memset(gba, 0, sizeof(struct GBA_Core));
+
+    ARM7_init(gba);
 }
 
 static void print_header(const struct GBA_CartHeader* header) {
@@ -152,8 +151,9 @@ int GBA_loadrom_data(struct GBA_Core* gba, const uint8_t* data, size_t rom_size)
     gba->cart.rom_size = rom_size;
     // save sram type (if any)
     gba->cart.sram_type = get_sram_type(data, rom_size);
-    // set entry point
-    gba->cpu.registers[REG_PC_INDEX] = header->rom_entry_point;
+
+    // execute initial instruction!
+    ARM7_execute_initial(gba, header->rom_entry_point);
 
     return 0;
 }
@@ -161,4 +161,8 @@ int GBA_loadrom_data(struct GBA_Core* gba, const uint8_t* data, size_t rom_size)
 void GBA_run_frame(struct GBA_Core* gba) {
     assert(gba);
 
+    // todo: count cycles!
+    for (;;) {
+        ARM7_run(gba);
+    }
 }

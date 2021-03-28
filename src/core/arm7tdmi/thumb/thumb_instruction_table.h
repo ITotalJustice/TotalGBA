@@ -1,19 +1,13 @@
 #pragma once
 
-#include "core/types.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#include "core/types.h"
+#include "core/arm7tdmi/thumb/unimplemented_instruction.h"
+
 typedef void (*thumb_instruction_t)(struct GBA_Core*, uint16_t opcode);
-
-static void THUMB_instruction_not_implemented(struct GBA_Core* gba, uint16_t opcode) {}
-
-// creates a 10-bit value which is used to index the instruction table
-static inline uint16_t THUMB_opcode_hash(const uint16_t opcode) {
-	return (opcode >> 6) & 0x3FF;
-}
 
 // 10-bit table
 static const thumb_instruction_t THUMB_INSTRUCTION_TABLE[0x400] = {

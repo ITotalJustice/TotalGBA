@@ -15,6 +15,7 @@ dependencies = [
 source = files([
     # core
     'src/core/gba.c',
+    'src/core/arm7tdmi/arm7tdmi.c',
     'src/core/mem/mmio.c',
     'src/core/util/string.c',
     'src/core/dummy_main.cpp',

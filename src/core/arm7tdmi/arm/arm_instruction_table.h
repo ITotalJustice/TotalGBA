@@ -1,19 +1,16 @@
 #pragma once
 
-#include "core/types.h"
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#include "core/types.h"
+#include "core/arm7tdmi/arm/unimplemented_instruction.h"
+
 typedef void (*arm_instruction_t)(struct GBA_Core*, uint32_t opcode);
 
-static void ARM_instruction_not_implemented(struct GBA_Core* gba, uint32_t opcode) {}
-
-// creates a 12-bit value which is used to index the instruction table
-static inline uint32_t ARM_opcode_hash(const uint32_t opcode) {
-	return ((opcode >> 12) & 0xFF0) | ((opcode >> 4) & 0xF);
-}
 
 // bit 27-20 | bit 7-4 table
 static const arm_instruction_t ARM_INSTRUCTION_TABLE[0x1000] = {

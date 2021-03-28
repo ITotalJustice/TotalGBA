@@ -7,7 +7,6 @@
 
 #include "core/gba.h"
 #include "core/util/bit.h"
-#include "core/arm7tdmi/arm7tdmi.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -113,6 +112,9 @@ int main(int argc, char** argv) {
 
     if (rom_data != NULL) {
         GBA_loadrom_data(gba, rom_data, rom_size);
+        for (;;) {
+            GBA_run_frame(gba);
+        }
     }
 
     // todo: loop here...

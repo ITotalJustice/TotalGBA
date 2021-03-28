@@ -62,12 +62,29 @@ enum Arm7tdmiFlag {
 };
 
 
+static inline enum Arm7tdmiState ARM7_get_state(const struct GBA_Core* gba) {
+    return (enum Arm7tdmiState)CPU.cpsr.T;
+}
+
+static inline bool ARM7_is_state(const struct GBA_Core* gba, const enum Arm7tdmiState wanted) {
+    return ARM7_get_state(gba) == wanted;
+}
+
+static inline uint8_t ARM7_get_mode(const struct GBA_Core* gba) {
+    return CPU.cpsr.M;
+}
+
+// NOTE: this does NOT do a proper mode switch!
+static inline void ARM7_set_mode(struct GBA_Core* gba, const enum Arm7tdmiMode mode) {
+    CPU.cpsr.M = mode;
+}
+
 static inline bool ARM7_get_flag(const struct GBA_Core* gba, const enum Arm7tdmiFlag flag) {
     switch (flag) {
         case FLAG_N: return CPU.cpsr.N;
-        case FLAG_Z: return CPU.cpsr.N;
-        case FLAG_C: return CPU.cpsr.N;
-        case FLAG_V: return CPU.cpsr.N; 
+        case FLAG_Z: return CPU.cpsr.Z;
+        case FLAG_C: return CPU.cpsr.C;
+        case FLAG_V: return CPU.cpsr.V; 
     }
 
     UNREACHABLE(0);
@@ -76,9 +93,9 @@ static inline bool ARM7_get_flag(const struct GBA_Core* gba, const enum Arm7tdmi
 static inline void ARM7_set_flag(struct GBA_Core* gba, const enum Arm7tdmiFlag flag, const bool value) {
     switch (flag) {
         case FLAG_N: CPU.cpsr.N = value; break;
-        case FLAG_Z: CPU.cpsr.N = value; break;
-        case FLAG_C: CPU.cpsr.N = value; break;
-        case FLAG_V: CPU.cpsr.N = value; break; 
+        case FLAG_Z: CPU.cpsr.Z = value; break;
+        case FLAG_C: CPU.cpsr.C = value; break;
+        case FLAG_V: CPU.cpsr.V = value; break; 
     }
 }
 
@@ -104,6 +121,12 @@ static inline bool ARM7_get_cond(const struct GBA_Core* gba, const enum Arm7tdmi
 
     UNREACHABLE(0);
 }
+
+void ARM7_init(struct GBA_Core* gba);
+
+void ARM7_execute_initial(struct GBA_Core* gba, const uint32_t arm_opcode);
+
+void ARM7_run(struct GBA_Core* gba);
 
 #ifdef __cplusplus
 }
