@@ -41,6 +41,8 @@ extern "C" {
 // ONLY use this for C-arrays, not pointers, not structs
 #define ARRAY_SIZE(array) (sizeof(array) / sizeof(array[0]))
 
+// 32-kib
+#define MAX_ROM_SIZE 0x02000000
 
 // mmio reads
 uint8_t GBA_read8(struct GBA_Core* gba, const uint32_t addr);
