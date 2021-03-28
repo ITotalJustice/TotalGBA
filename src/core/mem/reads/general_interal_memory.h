@@ -86,6 +86,19 @@ static inline uint32_t iwram_read32(struct GBA_Core* gba, uint32_t addr) {
     return 0xFF; // unused
 }
 
+/* io reads */
+static inline uint8_t io_read8(struct GBA_Core* gba, uint32_t addr) {
+    return 0xFF;
+}
+
+static inline uint16_t io_read16(struct GBA_Core* gba, uint32_t addr) {
+    return 0xFF;
+}
+
+static inline uint32_t io_read32(struct GBA_Core* gba, uint32_t addr) {
+    return 0xFF;
+}
+
 #ifdef __cplusplus
 }
 #endif

@@ -20,7 +20,7 @@ uint8_t GBA_read8(struct GBA_Core* gba, const uint32_t addr) {
         case 0x0: return bios_read8(gba, addr);
         case 0x2: return ewram_read8(gba, addr);
         case 0x3: return iwram_read8(gba, addr);
-        case 0x4: return 0xFF;
+        case 0x4: return io_read8(gba, addr);
         
         // Internal Display Memory
         case 0x5: return palette_ram_read8(gba, addr);
@@ -44,7 +44,7 @@ uint16_t GBA_read16(struct GBA_Core* gba, const uint32_t addr) {
         case 0x0: return bios_read16(gba, addr);
         case 0x2: return ewram_read16(gba, addr);
         case 0x3: return iwram_read16(gba, addr);
-        case 0x4: return 0xFF;
+        case 0x4: return io_read16(gba, addr);
         
         // Internal Display Memory
         case 0x5: return palette_ram_read16(gba, addr);
@@ -68,7 +68,7 @@ uint32_t GBA_read32(struct GBA_Core* gba, const uint32_t addr) {
         case 0x0: return bios_read32(gba, addr);
         case 0x2: return ewram_read32(gba, addr);
         case 0x3: return iwram_read32(gba, addr);
-        case 0x4: return 0xFF;
+        case 0x4: return io_read32(gba, addr);
         
         // Internal Display Memory
         case 0x5: return palette_ram_read32(gba, addr);
@@ -92,7 +92,7 @@ void GBA_write8(struct GBA_Core* gba, const uint32_t addr, const uint8_t value) 
         // General Internal Memory
         case 0x2: ewram_write8(gba, addr, value); break;
         case 0x3: iwram_write8(gba, addr, value); break;
-        case 0x4: // 0xFF;
+        case 0x4: io_write8(gba, addr, value); break;
         
         // Internal Display Memory
         case 0x5: palette_ram_write8(gba, addr, value); break;
@@ -109,7 +109,7 @@ void GBA_write16(struct GBA_Core* gba, const uint32_t addr, const uint16_t value
         // General Internal Memory
         case 0x2: ewram_write16(gba, addr, value); break;
         case 0x3: iwram_write16(gba, addr, value); break;
-        case 0x4: // 0xFF;
+        case 0x4: io_write16(gba, addr, value); break;
         
         // Internal Display Memory
         case 0x5: palette_ram_write16(gba, addr, value); break;
@@ -126,7 +126,7 @@ void GBA_write32(struct GBA_Core* gba, const uint32_t addr, const uint32_t value
         // General Internal Memory
         case 0x2: ewram_write32(gba, addr, value); break;
         case 0x3: iwram_write32(gba, addr, value); break;
-        case 0x4: // 0xFF;
+        case 0x4: io_write32(gba, addr, value); break;
         
         // Internal Display Memory
         case 0x5: palette_ram_write32(gba, addr, value); break;
