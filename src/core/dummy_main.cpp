@@ -13,27 +13,6 @@
 #include <string.h>
 #include <assert.h>
 
-static void _gen_arm_table() {
-    FILE* fout = fopen("arm_instruction_table.h", "w");
-
-    fprintf(fout, "#pragma once\n\n#include \"core/types.h\"\n\n");
-    fprintf(fout, "%s\n%s\n%s\n\n", "#ifdef __cplusplus", "extern \"C\" {", "#endif");
-    fprintf(fout, "%s\n\n", "typedef void (*arm_instruction_t)(struct GBA_Core*, uint32_t opcode);");
-
-    fprintf(fout, "%s\n\n", "static void ARM_instruction_not_implemented(struct GBA_Core* gba, uint32_t opcode) {}");
-
-    fprintf(fout, "%s\n%s\n", "// bit 27-20 | bit 7-4 table", "static const arm_instruction_t ARM_INSTRUCTION_TABLE[0x1000] = {");
-
-    for (int i = 0; i < 0x1000; i++) {
-        fprintf(fout, "\t[0x%03X] = %s,\n", i, "ARM_instruction_not_implemented");
-    }
-    fprintf(fout, "};\n\n");
-
-    fprintf(fout, "%s\n%s\n%s\n\n", "#ifdef __cplusplus", "}", "#endif");
-
-    fclose(fout);
-}
-
 static void _gen_thumb_table() {
     FILE* fout = fopen("thumb_instruction_table.h", "w");
 
@@ -56,7 +35,6 @@ static void _gen_thumb_table() {
 }
 
 static void gen_empty_tables() {
-    _gen_arm_table();
     _gen_thumb_table();
 }
 
@@ -89,9 +67,33 @@ static void gen_mask_table() {
     fclose(fout);
 }
 
+static void sanity_tests() {
+    // ensure the size of the header is the same across platforms!
+    assert(sizeof(struct GBA_CartHeader) == CART_HEADER_SIZE && "Header size has changed!");
+
+    // simple 24-bit asr
+    assert(sign_extend(23, 0b110011111111111111111111) == (int32_t)0b1111'1111'1100'1111'1111'1111'1111'1111);
+    // set the sign-bit to bit 1, then asr 31-bits
+    assert(sign_extend(0, 0b0001) == (int32_t)0b1111'1111'1111'1111'1111'1111'1111'1111);
+    // this is used in thumb ldr halword sign
+    assert(sign_extend(15, 0b0000'0000'1110'0000'1111'1111'1111'1111) == (int32_t)0b1111'1111'1111'1111'1111'1111'1111'1111);
+    // same as above but no sign
+    assert(sign_extend(15, 0b0000'0000'1110'0000'0111'1111'1111'1111) == 0b0000'0000'0000'0000'0111'1111'1111'1111);
+
+    // check that bit ranges till work...
+    assert(get_bit_range(3, 5, 0b111'000) == 0b000'111);
+    assert(get_bit_range(0, 2, 0b000'010) == 0b000'010);
+    assert(get_bit_range(1, 5, 0b111'110) == 0b011'111);
+    assert(get_bit_range(4, 5, 0b110'000) == 0b000'011);
+}
+
 int main(int argc, char** argv) {
     uint8_t* rom_data = NULL;
     uint32_t rom_size = 0;
+
+    // if this asserts, we have big problems
+    sanity_tests();
+
 
     if (argc > 1) {
         FILE* f = fopen(argv[1], "rb");
@@ -121,24 +123,6 @@ int main(int argc, char** argv) {
 
     // gen_mask_table();
     // gen_empty_tables();
-
-    // ensure the size of the header is the same across platforms!
-    assert(sizeof(struct GBA_CartHeader) == CART_HEADER_SIZE && "Header size has changed!");
-
-    // simple 24-bit asr
-    assert(sign_extend(23, 0b110011111111111111111111) == 0b11111111110011111111111111111111);
-    // set the sign-bit to bit 1, then asr 31-bits
-    assert(sign_extend(0, 0b0001) == 0b11111111111111111111111111111111);
-    // this is used in thumb ldr halword sign
-    assert(sign_extend(15, 0b00000000111000001111111111111111) == 0b11111111111111111111111111111111);
-    // same as above but no sign
-    assert(sign_extend(15, 0b00000000111000000111111111111111) == 0b00000000000000000111111111111111);
-
-    // check that bit ranges till work...
-    assert(get_bit_range(3, 5, 0b111000) == 0b000111);
-    assert(get_bit_range(0, 2, 0b000010) == 0b000010);
-    assert(get_bit_range(1, 5, 0b111110) == 0b011111);
-    assert(get_bit_range(4, 5, 0b110000) == 0b000011);
 
     return 0;
 }

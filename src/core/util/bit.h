@@ -25,11 +25,11 @@ static inline uint32_t get_bit_range(const uint8_t start, const uint8_t end, con
     return (value & (0xFFFFFFFF >> (31 - end))) >> start;
 }
 
-static inline uint32_t sign_extend(const uint8_t start_size, const uint32_t value) {
+static inline int32_t sign_extend(const uint8_t start_size, const uint32_t value) {
     assert(start_size < 31 && "bit start size is out of bounds!");
 
     const uint8_t bits = 31 - start_size;
-    return (uint32_t)(((int32_t)(value << bits)) >> bits);
+    return ((int32_t)(value << bits)) >> bits;
 }
 
 #ifdef __cplusplus

@@ -57,6 +57,7 @@ build
 src/frontend
 src/libs
 roms
+extra
 
 # vs
 .vs

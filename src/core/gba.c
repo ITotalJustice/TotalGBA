@@ -153,7 +153,7 @@ int GBA_loadrom_data(struct GBA_Core* gba, const uint8_t* data, size_t rom_size)
     gba->cart.sram_type = get_sram_type(data, rom_size);
 
     // execute initial instruction!
-    ARM7_execute_initial(gba, header->rom_entry_point);
+    // ARM7_execute_initial(gba, header->rom_entry_point);
 
     return 0;
 }

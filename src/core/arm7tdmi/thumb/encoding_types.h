@@ -116,158 +116,139 @@ struct Format_19 {
 
 /* gen type functions */
 static inline struct Format_1 gen_format_1(const uint16_t opcode) {
-    const struct Format_1 format = {
+    return (struct Format_1){
         .rd = get_bit_range(0, 2, opcode),
         .rs = get_bit_range(3, 5, opcode),
         .offset5 = get_bit_range(6, 10, opcode),
     };
-    return format;
 }
 
 static inline struct Format_2 gen_format_2_offset(const uint16_t opcode) {
-    const struct Format_2 format = {
+    return (struct Format_2){
         .rd = get_bit_range(0, 2, opcode),
         .rs = get_bit_range(3, 5, opcode),
         .offset3 = get_bit_range(6, 8, opcode),
     };
-    return format;
 }
 
 static inline struct Format_2 gen_format_2_reg(const uint16_t opcode) {
-    const struct Format_2 format = {
+    return (struct Format_2){
         .rd = get_bit_range(0, 2, opcode),
         .rs = get_bit_range(3, 5, opcode),
         .rn = get_bit_range(6, 8, opcode),
     };
-    return format;
 }
 
 static inline struct Format_3 gen_format_3(const uint16_t opcode) {
-    const struct Format_3 format = {
+    return (struct Format_3){
         .offset8 = get_bit_range(0, 7, opcode),
         .rd = get_bit_range(8, 10, opcode),
     };
-    return format;
 }
 
 static inline struct Format_4 gen_format_4(const uint16_t opcode) {
-    const struct Format_4 format = {
+    return (struct Format_4){
         .rd = get_bit_range(0, 2, opcode),
         .rs = get_bit_range(3, 5, opcode),
     };
-    return format;
 }
 
 static inline struct Format_6 gen_format_6(const uint16_t opcode) {
-    const struct Format_6 format = {
+    return (struct Format_6){
         .word8 = get_bit_range(0, 7, opcode) << 2, // 10-bit
         .rd = get_bit_range(8, 10, opcode),
     };
-    return format;
 }
 
 static inline struct Format_7 gen_format_7(const uint16_t opcode) {
-    const struct Format_7 format = {
+    return (struct Format_7){
         .rd = get_bit_range(0, 2, opcode),
         .rb = get_bit_range(3, 5, opcode),
         .ro = get_bit_range(6, 8, opcode),
     };
-    return format;
 }
 
 static inline struct Format_8 gen_format_8(const uint16_t opcode) {
-    const struct Format_8 format = {
+    return (struct Format_8){
         .rd = get_bit_range(0, 2, opcode),
         .rb = get_bit_range(3, 5, opcode),
         .ro = get_bit_range(6, 8, opcode),
     };
-    return format;
 }
 
 static inline struct Format_9 gen_format_9_byte(const uint16_t opcode) {
-    const struct Format_9 format = {
+    return (struct Format_9){
         .rd = get_bit_range(0, 2, opcode),
         .rb = get_bit_range(3, 5, opcode),
         .offset5 = get_bit_range(6, 10, opcode), // 5-bit
     };
-    return format;
 }
 
 static inline struct Format_9 gen_format_9_word(const uint16_t opcode) {
-    const struct Format_9 format = {
+    return (struct Format_9){
         .rd = get_bit_range(0, 2, opcode),
         .rb = get_bit_range(3, 5, opcode),
         .offset5 = get_bit_range(6, 10, opcode) << 2, // 7-bit
     };
-    return format;
 }
 
 static inline struct Format_10 gen_format_10(const uint16_t opcode) {
-    const struct Format_10 format = {
+    return (struct Format_10){
         .rd = get_bit_range(0, 2, opcode),
         .rb = get_bit_range(3, 5, opcode),
         .offset5 = get_bit_range(6, 10, opcode) << 1, // 6-bit
     };
-    return format;
 }
 
 static inline struct Format_11 gen_format_11(const uint16_t opcode) {
-    const struct Format_11 format = {
+    return (struct Format_11){
         .word8 = get_bit_range(0, 7, opcode) << 2, // 10-bit
         .rd = get_bit_range(8, 10, opcode),
     };
-    return format;
 }
 
 static inline struct Format_12 gen_format_12(const uint16_t opcode) {
-    const struct Format_12 format = {
+    return (struct Format_12){
         .word8 = get_bit_range(0, 7, opcode) << 2, // 10-bit
         .rd = get_bit_range(8, 10, opcode),
     };
-    return format;
 }
 
 static inline struct Format_13 gen_format_13(const uint16_t opcode) {
-    const struct Format_13 format = {
+    return (struct Format_13){
         .sword7 = sign_extend(7, opcode), // 9-bit sign extended
     };
-    return format;
 }
 
 static inline struct Format_14 gen_format_14(const uint16_t opcode) {
-    const struct Format_14 format = {
+    return (struct Format_14){
         .rlist = get_bit_range(0, 7, opcode),
     };
-    return format;
 }
 
 static inline struct Format_15 gen_format_15(const uint16_t opcode) {
-    const struct Format_15 format = {
+    return (struct Format_15){
         .rlist = get_bit_range(0, 7, opcode),
         .rb = get_bit_range(8, 10, opcode),
     };
-    return format;
 }
 
 static inline struct Format_17 gen_format_17(const uint16_t opcode) {
-    const struct Format_17 format = {
+    return (struct Format_17){
         .value8 = get_bit_range(0, 7, opcode),
     };
-    return format;
 }
 
 static inline struct Format_18 gen_format_18(const uint16_t opcode) {
-    const struct Format_18 format = {
+    return (struct Format_18){
         .offset11 = get_bit_range(0, 10, opcode) << 1, // 12-bit
     };
-    return format;
 }
 
 static inline struct Format_19 gen_format_19(const uint16_t opcode) {
-    const struct Format_19 format = {
+    return (struct Format_19){
         .offset = get_bit_range(0, 10, opcode),
     };
-    return format;
 }
 
 #ifdef __cplusplus
