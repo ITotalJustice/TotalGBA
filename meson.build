@@ -124,7 +124,7 @@ cflags = [
     '-Wall',
     '-Wextra',
     '-Werror',
-    '-Wpedantic',
+    # '-Wpedantic',
     '-Wswitch-enum',
     '-Wduplicated-branches',
     '-Wduplicated-cond',

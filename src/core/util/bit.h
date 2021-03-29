@@ -7,17 +7,16 @@ extern "C" {
 #include <stdint.h>
 #include <assert.h>
 
-/*
-static inline unsigned get_bit_range(const uint8_t start, const uint8_t end, const unsigned v) {
-    assert(end > start && "invalid bit range!");
 
-    return (v & (0xFFFFFFFF >> (31 - end))) >> start;
-
-    return (v >> start) & (0xFFFFFFFF >> (31 - (start + end)));
-    
-    return (v >> start) & MASK_RANGE_TABLE[end - start];
+// NOTE: value might need to be cast to u64 first on 32bit!
+static inline uint32_t bit_rotr(const uint32_t value, const uint32_t shift) {
+    return (value >> shift) | (value << (32 - shift));
 }
-*/
+
+static inline bool is_bit_set(const uint8_t bit, const uint32_t value) {
+    assert(bit < (sizeof(uint32_t) * 8) && "bit value out of bounds!");
+    return (value & (1U << bit)) > 0;
+}
 
 static inline uint32_t get_bit_range(const uint8_t start, const uint8_t end, const uint32_t value) {
     assert(end > start && "invalid bit range!");

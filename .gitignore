@@ -58,6 +58,7 @@ src/frontend
 src/libs
 roms
 extra
+arm_instruction_table.h
 
 # vs
 .vs

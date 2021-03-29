@@ -152,8 +152,6 @@ int GBA_loadrom_data(struct GBA_Core* gba, const uint8_t* data, size_t rom_size)
     // save sram type (if any)
     gba->cart.sram_type = get_sram_type(data, rom_size);
 
-    // execute initial instruction!
-    // ARM7_execute_initial(gba, header->rom_entry_point);
 
     return 0;
 }
@@ -164,5 +162,6 @@ void GBA_run_frame(struct GBA_Core* gba) {
     // todo: count cycles!
     for (;;) {
         ARM7_run(gba);
+        fprintf(stdout, "PC: 0x%08X LR: 0x%08X SP: 0x%08X\n", CPU.registers[15], CPU.registers[14], CPU.registers[13]);
     }
 }

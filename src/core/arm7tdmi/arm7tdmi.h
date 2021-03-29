@@ -99,6 +99,12 @@ static inline void ARM7_set_flag(struct GBA_Core* gba, const enum Arm7tdmiFlag f
     }
 }
 
+static inline void ARM7_set_flags_nzc(struct GBA_Core* gba, const bool n, const bool z, const bool c) {
+    ARM7_set_flag(gba, FLAG_N, n);
+    ARM7_set_flag(gba, FLAG_Z, z);
+    ARM7_set_flag(gba, FLAG_C, c);
+}
+
 static inline bool ARM7_get_cond(const struct GBA_Core* gba, const enum Arm7tdmiCondition cond) {
     switch (cond) {
         case COND_EQ: return CPU.cpsr.Z;
@@ -123,8 +129,6 @@ static inline bool ARM7_get_cond(const struct GBA_Core* gba, const enum Arm7tdmi
 }
 
 void ARM7_init(struct GBA_Core* gba);
-
-void ARM7_execute_initial(struct GBA_Core* gba, const uint32_t arm_opcode);
 
 void ARM7_run(struct GBA_Core* gba);
 

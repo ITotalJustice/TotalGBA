@@ -1,9 +1,9 @@
 #include "core/arm7tdmi/arm7tdmi.h"
 
 #include "core/arm7tdmi/arm/encoding_types.h"
-#include "core/arm7tdmi/arm/arm_instruction_table.h"
+#include "core/arm7tdmi/arm/instruction_table.h"
 
-#include "core/arm7tdmi/thumb/thumb_instruction_table.h"
+#include "core/arm7tdmi/thumb/instruction_table.h"
 #include "core/arm7tdmi/thumb/encoding_types.h"
 
 
@@ -38,10 +38,6 @@ void ARM7_init(struct GBA_Core* gba) {
 
     ARM7_set_mode(gba, MODE_SYSTEM);
     CPU.registers[REG_PC_INDEX] = ROM_START_ADDR;
-}
-
-void ARM7_execute_initial(struct GBA_Core* gba, const uint32_t arm_opcode) {
-    execute_arm(gba, arm_opcode);
 }
 
 void ARM7_run(struct GBA_Core* gba) {
