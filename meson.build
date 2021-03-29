@@ -19,6 +19,7 @@ source = files([
     'src/core/arm7tdmi/arm7tdmi.c',
     'src/core/arm7tdmi/arm/instructions/branch_and_branch_with_link.c',
     'src/core/arm7tdmi/arm/instructions/logical_data_processing.c',
+    'src/core/arm7tdmi/arm/instructions/arithmetic_data_processing.c',
     'src/core/arm7tdmi/arm/instructions/psr_transfer.c',
     'src/core/arm7tdmi/arm/instructions/single_data_transfer.c',
     'src/core/arm7tdmi/arm/instructions/undefined.c',

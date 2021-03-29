@@ -1,45 +1,10 @@
 #include "core/arm7tdmi/arm7tdmi.h"
 #include "core/arm7tdmi/arm/encoding_types.h"
+#include "core/arm7tdmi/arm/instructions/data_processing_common.h"
 
 #include <stdio.h>
 #include <assert.h>
 
-
-static inline void _update_logical_flags(struct GBA_Core* gba, const uint32_t result, const bool sbit, const bool carry) {
-    if (sbit == true) {
-        ARM7_set_flags_nzc(gba,
-            is_bit_set(31, result),
-            result == 0,
-            carry 
-        );
-    }
-}
-
-static inline struct ShiftResult _imm_shift(const struct GBA_Core* gba, const struct Format_4_5* format) {
-    return barrel_shift_ROR(
-        format->operand2.imm.imm,
-        format->operand2.imm.rotate,
-        ARM7_get_flag(gba, FLAG_C)
-    );
-}
-
-static inline struct ShiftResult _reg_shift(const struct GBA_Core* gba, const struct Format_4_5* format) {
-    return barrel_shift(
-        format->operand2.reg.shift_type,
-        CPU.registers[format->operand2.reg.rm],
-        format->operand2.reg.shift_amount,
-        ARM7_get_flag(gba, FLAG_C)
-    );
-}
-
-static inline struct ShiftResult _reg_rs_shift(const struct GBA_Core* gba, const struct Format_4_5* format) {
-    return barrel_shift(
-        format->operand2.reg.shift_type,
-        CPU.registers[format->operand2.reg.rm],
-        CPU.registers[format->operand2.reg.rs] & 0xFF,
-        ARM7_get_flag(gba, FLAG_C)
-    );
-}
 
 // actual instructions
 static inline void ARM_instruction_AND(struct GBA_Core* gba, const struct Format_4_5* format, const struct ShiftResult* shift) {
