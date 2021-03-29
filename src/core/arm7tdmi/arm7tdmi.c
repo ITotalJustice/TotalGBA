@@ -2,6 +2,7 @@
 
 #include "core/arm7tdmi/arm/encoding_types.h"
 #include "core/arm7tdmi/arm/instruction_table.h"
+#include "core/arm7tdmi/arm/opcode_hash.h"
 
 #include "core/arm7tdmi/thumb/instruction_table.h"
 #include "core/arm7tdmi/thumb/encoding_types.h"
@@ -20,10 +21,14 @@ static inline uint16_t fetch_thumb(struct GBA_Core* gba) {
 }
 
 static inline void execute_arm(struct GBA_Core* gba, const uint32_t opcode) {
-    // generate decoded opcode hash.
-    const uint32_t hash_index = ARM_opcode_hash(opcode);
-    // now execute instruction!
-    ARM_INSTRUCTION_TABLE[hash_index](gba, opcode);
+    if (ARM7_get_cond(gba, opcode >> 28)) {
+        // generate decoded opcode hash.
+        const uint32_t hash_index = ARM_opcode_hash(opcode);
+        // now execute instruction!
+        ARM_INSTRUCTION_TABLE[hash_index](gba, opcode);
+    } else {
+        fprintf(stdout, "skipping instruction!\n");
+    }
 }
 
 static inline void execute_thumb(struct GBA_Core* gba, const uint16_t opcode) {
