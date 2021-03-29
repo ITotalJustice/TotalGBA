@@ -24,7 +24,11 @@ struct Format_4_5 {
     union {
         struct {
             uint8_t rm : 4;
-            uint8_t shift;
+            uint8_t shift_type : 2;
+            union {
+                uint8_t rs : 4;
+                uint8_t shift_amount : 5;
+            };
         } reg;
 
         struct {
@@ -39,12 +43,28 @@ struct Format_4_5 {
 };
 
 /* gen type functions */
-static inline struct Format_4_5 gen_Format_4_5_reg(const uint32_t opcode) {
+static inline struct Format_4_5 gen_Format_4_5_reg_rs(const uint32_t opcode) {
     return (struct Format_4_5){
         .operand2 = {
             .reg = {
                 .rm = get_bit_range(0, 3, opcode),
-                .shift = get_bit_range(4, 11, opcode)
+                .shift_type = get_bit_range(5, 6, opcode),
+                .rs = get_bit_range(8, 11, opcode)
+            }
+        },
+        .rd = get_bit_range(12, 15, opcode),
+        .rn = get_bit_range(16, 19, opcode),
+        .s = is_bit_set(20, opcode)
+    };
+}
+
+static inline struct Format_4_5 gen_Format_4_5_reg_shift(const uint32_t opcode) {
+    return (struct Format_4_5){
+        .operand2 = {
+            .reg = {
+                .rm = get_bit_range(0, 3, opcode),
+                .shift_type = get_bit_range(5, 6, opcode),
+                .shift_amount = get_bit_range(7, 11, opcode)
             }
         },
         .rd = get_bit_range(12, 15, opcode),
