@@ -8,6 +8,17 @@ extern "C" {
 #include "core/util/bit.h"
 #include "core/arm7tdmi/barrel_shifter.h"
 
+// [4.3]
+struct Format_4_3 {
+    uint8_t rn : 4;
+};
+
+static inline struct Format_4_3 gen_Format_4_3(const uint32_t opcode) {
+    return (struct Format_4_3){
+        .rn = get_bit_range(0, 3, opcode)
+    };
+}
+
 // [4.4]
 struct Format_B {
     int32_t offset;

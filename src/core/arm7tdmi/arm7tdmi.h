@@ -66,6 +66,10 @@ static inline enum Arm7tdmiState ARM7_get_state(const struct GBA_Core* gba) {
     return (enum Arm7tdmiState)CPU.cpsr.T;
 }
 
+static inline void ARM7_set_state(struct GBA_Core* gba, const enum Arm7tdmiState state) {
+    CPU.cpsr.T = state;
+}
+
 static inline bool ARM7_is_state(const struct GBA_Core* gba, const enum Arm7tdmiState wanted) {
     return ARM7_get_state(gba) == wanted;
 }
