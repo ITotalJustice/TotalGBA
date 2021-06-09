@@ -59,6 +59,8 @@ src/libs
 roms
 extra
 arm_instruction_table.h
+old/
+dummy_main.cpp
 
 # vs
 .vs
