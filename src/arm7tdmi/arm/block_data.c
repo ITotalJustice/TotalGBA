@@ -100,12 +100,7 @@ static inline void arm_rlist(struct GBA_Core* gba, uint32_t opcode)
     }
 }
 
-void arm_stm(struct GBA_Core* gba, uint32_t opcode)
-{
-    arm_rlist(gba, opcode);
-}
-
-void arm_ldm(struct GBA_Core* gba, uint32_t opcode)
+void arm_stm_ldm(struct GBA_Core* gba, uint32_t opcode)
 {
     arm_rlist(gba, opcode);
 }

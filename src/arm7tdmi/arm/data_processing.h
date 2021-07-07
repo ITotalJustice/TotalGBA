@@ -8,6 +8,7 @@ extern "C" {
 
 
 void arm_add_imm(struct GBA_Core* gba, uint32_t opcode);
+void arm_and_imm(struct GBA_Core* gba, uint32_t opcode);
 void arm_mov_imm(struct GBA_Core* gba, uint32_t opcode);
 
 #ifdef __cplusplus

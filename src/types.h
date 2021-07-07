@@ -73,11 +73,27 @@ enum GBA_HeaderLanguageCode
     LANGUAGE_CODE_Italian
 };
 
-// todo: remove ALL bitfields, theres no reason to use them...
+enum InterruptFlag
+{
+    InterruptFlag_VBLANK    = 1 << 0,
+    InterruptFlag_HBLANK    = 1 << 1,
+    InterruptFlag_LYC       = 1 << 2,
+    InterruptFlag_TIMER0    = 1 << 3,
+    InterruptFlag_TIMER1    = 1 << 4,
+    InterruptFlag_TIMER2    = 1 << 5,
+    InterruptFlag_TIMER3    = 1 << 6,
+    InterruptFlag_SERIAL    = 1 << 7,
+    InterruptFlag_DMA0      = 1 << 8,
+    InterruptFlag_DMA1      = 1 << 9,
+    InterruptFlag_DMA2      = 1 << 10,
+    InterruptFlag_DMA3      = 1 << 11,
+    InterruptFlag_KEYPAD    = 1 << 12,
+    InterruptFlag_GAMEPAK   = 1 << 13,
+};
 
 // LCD I/O Display Control 
 // SOURCE: https://problemkaputt.de/gbatek.htm#lcdiodisplaycontrol
-struct IO_DISPCNT
+struct DISPCNT
 {
     uint8_t bg_mode;
     bool cgb_mode;
@@ -97,20 +113,26 @@ struct IO_DISPCNT
 
 // LCD I/O Interrupts and Status
 // SOURCE: https://problemkaputt.de/gbatek.htm#lcdiointerruptsandstatus
-struct IO_DISPSTAT
+struct DISPSTAT
 {
-    bool vblank_flag;
-    bool hblank_flag;
-    bool vcounter_flag;
-    bool vblank_irq_enable;
-    bool hblank_irq_enable;
-    bool vcounter_irq_enable;
-    uint8_t vcount_setting;
+    bool vblank;
+    bool hblank;
+    bool vcounter;
+    bool vblank_irq;
+    bool hblank_irq;
+    bool vcounter_irq;
+    uint8_t lyc;
+};
+
+// basically LY
+struct VCOUNT
+{
+    uint8_t value;
 };
 
 // LCD I/O BG Control
 // SOURCE: https://problemkaputt.de/gbatek.htm#lcdiobgcontrol
-struct IO_BG0CNT
+struct BG0CNT
 {
     uint8_t bg_priority;
     uint8_t char_base_block;
@@ -123,21 +145,21 @@ struct IO_BG0CNT
 
 // LCD I/O BG Scrolling
 // SOURCE: https://problemkaputt.de/gbatek.htm#lcdiobgscrolling
-struct IO_BG0HOFS
+struct BG0HOFS
 {
     uint16_t offset;
 };
 
 // LCD I/O BG Rotation/Scaling
 // SOURCE: https://problemkaputt.de/gbatek.htm#lcdiobgrotationscaling
-struct IO_BG2X_L
+struct BG2X_L
 {
     uint32_t fractional : 8;
     uint32_t interger : 19;
     uint32_t sign : 1;
 };
 
-struct IO_BG2PA
+struct BG2PA
 {
     uint16_t fractional : 8;
     uint16_t interger : 7;
@@ -146,19 +168,19 @@ struct IO_BG2PA
 
 // LCD I/O Window Feature
 // SOURCE: https://problemkaputt.de/gbatek.htm#lcdiowindowfeature
-struct IO_WIN0H
+struct WIN0H
 {
     uint16_t x2 : 8;
     uint16_t x1 : 8;
 };
 
-struct IO_WIN0V
+struct WIN0V
 {
     uint16_t y2 : 8;
     uint16_t y1 : 8;
 };
 
-struct IO_WININ
+struct WININ
 {
     bool window0_bg0_enable;
     bool window0_bg1_enable;
@@ -174,7 +196,7 @@ struct IO_WININ
     bool window1_colour_special_effect;
 };
 
-struct IO_WINOUT
+struct WINOUT
 {
     bool outside_bg0_enable;
     bool outside_bg1_enable;
@@ -192,7 +214,7 @@ struct IO_WINOUT
 
 // LCD I/O Mosaic Function
 // SOURCE: https://problemkaputt.de/gbatek.htm#lcdiomosaicfunction
-struct IO_MOSAIC
+struct MOSAIC
 {
     uint16_t bg_h_size : 4;
     uint16_t bg_v_size : 4;
@@ -202,7 +224,7 @@ struct IO_MOSAIC
 
 // LCD I/O Color Special Effects
 // SOURCE: https://problemkaputt.de/gbatek.htm#lcdiocolorspecialeffects
-struct IO_BLDCNT
+struct BLDCNT
 {
     bool bg0_1st_target_pixel;
     bool bg1_1st_target_pixel;
@@ -219,27 +241,27 @@ struct IO_BLDCNT
     bool bd_2nd_target_pixel;
 };
 
-struct IO_BLDALPHA
+struct BLDALPHA
 {
     uint8_t eva_coefficient_1st;
     uint8_t eva_coefficient_2nd;
 };
 
-struct IO_BLDY
+struct BLDY
 {
     uint8_t evy_coefficient : 4;
 };
 
 // GBA Sound Channel 1 - Tone & Sweep
 // SOURCE: https://problemkaputt.de/gbatek.htm#gbasoundchannel1tonesweep
-struct IO_SOUND1CNT_L
+struct SOUND1CNT_L
 {
     uint16_t num_sweep_shift : 3;
     uint16_t sweep_freq_direction : 1;
     uint16_t sweep_time : 2;
 };
 
-struct IO_SOUND1CNT_H
+struct SOUND1CNT_H
 {
     uint16_t sound_len : 6;
     uint16_t wave_pattern_duty : 2;
@@ -248,27 +270,28 @@ struct IO_SOUND1CNT_H
     uint16_t initial_vol_of_envelope : 4;
 };
 
-struct IO_IME
+struct IME
 {
     bool enable;
 };
 
-struct IO_IE
+struct IE
 {
-    bool lcd_vblank;
-    bool lcd_hblank;
-    bool lcd_vcounter_match;
-    bool timer0_overflow;
-    bool timer1_overflow;
-    bool timer2_overflow;
-    bool timer3_overflow;
-    bool serial_communication;
-    bool dma0;
-    bool dma1;
-    bool dma2;
-    bool dma3;
-    bool keypad;
-    bool game_pak;
+    uint16_t value;
+    // bool lcd_vblank;
+    // bool lcd_hblank;
+    // bool lcd_vcounter_match;
+    // bool timer0_overflow;
+    // bool timer1_overflow;
+    // bool timer2_overflow;
+    // bool timer3_overflow;
+    // bool serial_communication;
+    // bool dma0;
+    // bool dma1;
+    // bool dma2;
+    // bool dma3;
+    // bool keypad;
+    // bool game_pak;
 };
 
 enum SramType
@@ -329,24 +352,25 @@ struct GBA_Mmio
     uint8_t oam[0x400];
 
     // io stuff
-    struct IO_DISPCNT DISPCNT;
-    struct IO_DISPSTAT DISPSTAT;
-    struct IO_BG0CNT BG0CNT;
-    struct IO_BG0CNT BG1CNT;
-    struct IO_BG0CNT BG2CNT;
-    struct IO_BG0CNT BG3CNT;
-    struct IO_BG0HOFS BG0HOFS;
-    struct IO_BG0HOFS BG0VOFS;
-    struct IO_BG0HOFS BG1HOFS;
-    struct IO_BG0HOFS BG1VOFS;
-    struct IO_BG0HOFS BG2HOFS;
-    struct IO_BG0HOFS BG2VOFS;
-    struct IO_BG0HOFS BG3HOFS;
-    struct IO_BG0HOFS BG3VOFS;
+    struct DISPCNT DISPCNT;
+    struct DISPSTAT DISPSTAT;
+    struct VCOUNT VCOUNT;
+    struct BG0CNT BG0CNT;
+    struct BG0CNT BG1CNT;
+    struct BG0CNT BG2CNT;
+    struct BG0CNT BG3CNT;
+    struct BG0HOFS BG0HOFS;
+    struct BG0HOFS BG0VOFS;
+    struct BG0HOFS BG1HOFS;
+    struct BG0HOFS BG1VOFS;
+    struct BG0HOFS BG2HOFS;
+    struct BG0HOFS BG2VOFS;
+    struct BG0HOFS BG3HOFS;
+    struct BG0HOFS BG3VOFS;
 
-    struct IO_IE IE;
-    struct IO_IE IF;
-    struct IO_IME IME;
+    struct IE IE;
+    struct IE IF;
+    struct IME IME;
 };
 
 struct GBA_Psr
@@ -387,9 +411,16 @@ struct GBA_Cart
     enum SramType sram_type;
 };
 
+struct GBA_Ppu
+{
+    int16_t next_cycles;
+    uint8_t mode;
+};
+
 struct GBA_Core
 {
     struct GBA_Cpu cpu;
+    struct GBA_Ppu ppu;
     struct GBA_Mmio mmio;
     struct GBA_Cart cart;
 

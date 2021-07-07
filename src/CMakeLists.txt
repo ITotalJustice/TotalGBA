@@ -30,6 +30,8 @@ else()
         arm7tdmi/arm/single_data.c
         arm7tdmi/thumb/thumb.c
         arm7tdmi/thumb/instructions.c
+        # ppu
+        ppu/ppu.c
     )
 
     target_compile_definitions(TotalGBA PRIVATE GBA_SINGLE_FILE=0)

@@ -157,6 +157,44 @@ Interrupt, Waitstate, and Power-Down Control
   4xx0800h  4    R/W  ?         Mirrors of 4000800h (repeated each 64K)
   4700000h  4    W    (3DS)     Disable ARM7 bootrom overlay (3DS only)
 */
+
+static inline uint8_t dispstat_read(struct GBA_Core* gba, uint8_t i)
+{
+    uint8_t v = 0;
+
+    switch (i & 1)
+    {
+        case 0:
+            v |= IO_DISPSTAT.vblank << 0;
+            v |= IO_DISPSTAT.hblank << 1;
+            v |= IO_DISPSTAT.vcounter << 2;
+            v |= IO_DISPSTAT.vblank_irq << 3;
+            v |= IO_DISPSTAT.hblank_irq << 4;
+            v |= IO_DISPSTAT.vcounter_irq << 5;
+            break;
+
+        case 1:
+            v = IO_DISPSTAT.lyc;
+            break;
+
+        default:
+            v = 0xFF;
+            break;
+    }
+
+    return v;
+}
+
+static inline uint8_t vcount_read(struct GBA_Core* gba, uint8_t i)
+{
+    switch (i & 1)
+    {
+        case 0: return IO_VCOUNT.value;
+    }
+
+    return 0x00;
+}
+
 uint8_t bios_read8(struct GBA_Core* gba, uint32_t addr)
 {
     (void)gba;
@@ -243,8 +281,21 @@ uint32_t iwram_read32(struct GBA_Core* gba, uint32_t addr)
 
 uint8_t io_read8(struct GBA_Core* gba, uint32_t addr)
 {
+    GBA_log("\tLY: %u\n", IO_VCOUNT.value);
+    GBA_log("\tLYC: %u\n", IO_DISPSTAT.lyc);
+    // GBA_log("\tLYC: %u\n", IO_DISPSTAT.lyc);
+    // GBA_log("\tLYC: %u\n", IO_DISPSTAT.lyc);
+    // GBA_log("\tLYC: %u\n", IO_DISPSTAT.lyc);
+    // GBA_log("\tLYC: %u\n", IO_DISPSTAT.lyc);
+
     switch (addr)
     {
+        case 0x4000004 + 0: return dispstat_read(gba, 0);
+        case 0x4000004 + 1: return dispstat_read(gba, 1);
+
+        case 0x4000006 + 0: return vcount_read(gba, 0);
+        case 0x4000006 + 1: return vcount_read(gba, 1);
+
         case 0x4000208 + 0: return gba->mmio.IME.enable;
         case 0x4000208 + 1: return 0xFF;
         case 0x4000208 + 2: return 0xFF; // not used

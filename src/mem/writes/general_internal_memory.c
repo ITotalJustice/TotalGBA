@@ -17,63 +17,47 @@ General Internal Memory
   04000400-04FFFFFF   Not used
 */
 
-#define DISPCNT gba->mmio.DISPCNT
-#define DISPSTAT gba->mmio.DISPSTAT
-#define BG0CNT gba->mmio.BG0CNT
-#define BG1CNT gba->mmio.BG1CNT
-#define BG2CNT gba->mmio.BG2CNT
-#define BG3CNT gba->mmio.BG3CNT
-#define BG0HOFS gba->mmio.BG0HOFS
-#define BG0VOFS gba->mmio.BG0VOFS
-#define BG1HOFS gba->mmio.BG1HOFS
-#define BG1VOFS gba->mmio.BG1VOFS
-#define BG2HOFS gba->mmio.BG2HOFS
-#define BG2VOFS gba->mmio.BG2VOFS
-#define BG3HOFS gba->mmio.BG3HOFS
-#define BG3VOFS gba->mmio.BG3VOFS
-
-
 static inline void dispcnt_write(struct GBA_Core* gba, uint8_t v, uint8_t i)
 {
     switch (i & 1)
     {
         case 0:
-            DISPCNT.bg_mode = get_bit_range(0, 2, v);
-            DISPCNT.display_frame_select = is_bit_set(4, v);
-            DISPCNT.hblank_interval_free = is_bit_set(5, v);
-            DISPCNT.obj_character_vram_mapping = is_bit_set(6, v);
-            DISPCNT.forced_blank = is_bit_set(7, v);
+            IO_DISPCNT.bg_mode = get_bit_range(0, 2, v);
+            IO_DISPCNT.display_frame_select = is_bit_set(4, v);
+            IO_DISPCNT.hblank_interval_free = is_bit_set(5, v);
+            IO_DISPCNT.obj_character_vram_mapping = is_bit_set(6, v);
+            IO_DISPCNT.forced_blank = is_bit_set(7, v);
             break;
 
         case 1:
-            DISPCNT.screen_display_bg0 = is_bit_set(0, v);
-            DISPCNT.screen_display_bg1 = is_bit_set(1, v);
-            DISPCNT.screen_display_bg2 = is_bit_set(2, v);
-            DISPCNT.screen_display_bg3 = is_bit_set(3, v);
-            DISPCNT.screen_display_obj = is_bit_set(4, v);
-            DISPCNT.window_0_display_flag = is_bit_set(5, v);
-            DISPCNT.window_1_display_flag = is_bit_set(6, v);
-            DISPCNT.obj_window_display_flag = is_bit_set(7, v);
+            IO_DISPCNT.screen_display_bg0 = is_bit_set(0, v);
+            IO_DISPCNT.screen_display_bg1 = is_bit_set(1, v);
+            IO_DISPCNT.screen_display_bg2 = is_bit_set(2, v);
+            IO_DISPCNT.screen_display_bg3 = is_bit_set(3, v);
+            IO_DISPCNT.screen_display_obj = is_bit_set(4, v);
+            IO_DISPCNT.window_0_display_flag = is_bit_set(5, v);
+            IO_DISPCNT.window_1_display_flag = is_bit_set(6, v);
+            IO_DISPCNT.obj_window_display_flag = is_bit_set(7, v);
             break;
     }
 
     if (i == 1)
     {
-        GBA_log("\nDISPCNT: WRITE\n");
-        GBA_log("\tbg_mode: %u\n", DISPCNT.bg_mode);
-        GBA_log("\tcgb_mode: %u\n", DISPCNT.cgb_mode);
-        GBA_log("\tdisplay_frame_select: %u\n", DISPCNT.display_frame_select);
-        GBA_log("\thblank_interval_free: %u\n", DISPCNT.hblank_interval_free);
-        GBA_log("\tobj_character_vram_mapping: %u\n", DISPCNT.obj_character_vram_mapping);
-        GBA_log("\tforced_blank: %u\n", DISPCNT.forced_blank);
-        GBA_log("\tscreen_display_bg0: %u\n", DISPCNT.screen_display_bg0);
-        GBA_log("\tscreen_display_bg1: %u\n", DISPCNT.screen_display_bg1);
-        GBA_log("\tscreen_display_bg2: %u\n", DISPCNT.screen_display_bg2);
-        GBA_log("\tscreen_display_bg3: %u\n", DISPCNT.screen_display_bg3);
-        GBA_log("\tscreen_display_obj: %u\n", DISPCNT.screen_display_obj);
-        GBA_log("\twindow_0_display_flag: %u\n", DISPCNT.window_0_display_flag);
-        GBA_log("\twindow_1_display_flag: %u\n", DISPCNT.window_1_display_flag);
-        GBA_log("\tobj_window_display_flag: %u\n", DISPCNT.obj_window_display_flag);
+        GBA_log("\nIO_DISPCNT: WRITE\n");
+        GBA_log("\tbg_mode: %u\n", IO_DISPCNT.bg_mode);
+        GBA_log("\tcgb_mode: %u\n", IO_DISPCNT.cgb_mode);
+        GBA_log("\tdisplay_frame_select: %u\n", IO_DISPCNT.display_frame_select);
+        GBA_log("\thblank_interval_free: %u\n", IO_DISPCNT.hblank_interval_free);
+        GBA_log("\tobj_character_vram_mapping: %u\n", IO_DISPCNT.obj_character_vram_mapping);
+        GBA_log("\tforced_blank: %u\n", IO_DISPCNT.forced_blank);
+        GBA_log("\tscreen_display_bg0: %u\n", IO_DISPCNT.screen_display_bg0);
+        GBA_log("\tscreen_display_bg1: %u\n", IO_DISPCNT.screen_display_bg1);
+        GBA_log("\tscreen_display_bg2: %u\n", IO_DISPCNT.screen_display_bg2);
+        GBA_log("\tscreen_display_bg3: %u\n", IO_DISPCNT.screen_display_bg3);
+        GBA_log("\tscreen_display_obj: %u\n", IO_DISPCNT.screen_display_obj);
+        GBA_log("\twindow_0_display_flag: %u\n", IO_DISPCNT.window_0_display_flag);
+        GBA_log("\twindow_1_display_flag: %u\n", IO_DISPCNT.window_1_display_flag);
+        GBA_log("\tobj_window_display_flag: %u\n", IO_DISPCNT.obj_window_display_flag);
     }
 }
 
@@ -82,18 +66,18 @@ static inline void dispstat_write(struct GBA_Core* gba, uint8_t v, uint8_t i)
     switch (i & 1)
     {
         case 0:
-            DISPSTAT.vblank_irq_enable = is_bit_set(3, v);
-            DISPSTAT.hblank_irq_enable = is_bit_set(4, v);
-            DISPSTAT.vcounter_irq_enable = is_bit_set(5, v);
+            IO_DISPSTAT.vblank_irq = is_bit_set(3, v);
+            IO_DISPSTAT.hblank_irq = is_bit_set(4, v);
+            IO_DISPSTAT.vcounter_irq = is_bit_set(5, v);
             break;
 
         case 1:
-            DISPSTAT.vcount_setting = v;
+            IO_DISPSTAT.lyc = v;
             break;
     }
 }
 
-static inline void bgxcnt_write(struct IO_BG0CNT* bg, bool bg2_3, uint8_t v, uint8_t i)
+static inline void bgxcnt_write(struct BG0CNT* bg, bool bg2_3, uint8_t v, uint8_t i)
 {
     switch (i & 1)
     {
@@ -117,25 +101,25 @@ static inline void bgxcnt_write(struct IO_BG0CNT* bg, bool bg2_3, uint8_t v, uin
 
 static inline void bg0cnt_write(struct GBA_Core* gba, uint8_t v, uint8_t i)
 {
-    bgxcnt_write(&BG0CNT, false, v, i);
+    bgxcnt_write(&IO_BG0CNT, false, v, i);
 }
 
 static inline void bg1cnt_write(struct GBA_Core* gba, uint8_t v, uint8_t i)
 {
-    bgxcnt_write(&BG1CNT, false, v, i);
+    bgxcnt_write(&IO_BG1CNT, false, v, i);
 }
 
 static inline void bg2cnt_write(struct GBA_Core* gba, uint8_t v, uint8_t i)
 {
-    bgxcnt_write(&BG2CNT, true, v, i);
+    bgxcnt_write(&IO_BG2CNT, true, v, i);
 }
 
 static inline void bg3cnt_write(struct GBA_Core* gba, uint8_t v, uint8_t i)
 {
-    bgxcnt_write(&BG3CNT, true, v, i);
+    bgxcnt_write(&IO_BG3CNT, true, v, i);
 }
 
-static inline void bgxhofs_write(struct IO_BG0HOFS* bg, uint8_t v, uint8_t i)
+static inline void bgxhofs_write(struct BG0HOFS* bg, uint8_t v, uint8_t i)
 {
     switch (i & 1)
     {
@@ -151,42 +135,42 @@ static inline void bgxhofs_write(struct IO_BG0HOFS* bg, uint8_t v, uint8_t i)
 
 static inline void bg0hofs_write(struct GBA_Core* gba, uint8_t v, uint8_t i)
 {
-    bgxhofs_write(&BG0HOFS, v, i);
+    bgxhofs_write(&IO_BG0HOFS, v, i);
 }
 
 static inline void bg0vofs_write(struct GBA_Core* gba, uint8_t v, uint8_t i)
 {
-    bgxhofs_write(&BG0VOFS, v, i);
+    bgxhofs_write(&IO_BG0VOFS, v, i);
 }
 
 static inline void bg1hofs_write(struct GBA_Core* gba, uint8_t v, uint8_t i)
 {
-    bgxhofs_write(&BG1HOFS, v, i);
+    bgxhofs_write(&IO_BG1HOFS, v, i);
 }
 
 static inline void bg1vofs_write(struct GBA_Core* gba, uint8_t v, uint8_t i)
 {
-    bgxhofs_write(&BG1VOFS, v, i);
+    bgxhofs_write(&IO_BG1VOFS, v, i);
 }
 
 static inline void bg2hofs_write(struct GBA_Core* gba, uint8_t v, uint8_t i)
 {
-    bgxhofs_write(&BG2HOFS, v, i);
+    bgxhofs_write(&IO_BG2HOFS, v, i);
 }
 
 static inline void bg2vofs_write(struct GBA_Core* gba, uint8_t v, uint8_t i)
 {
-    bgxhofs_write(&BG2VOFS, v, i);
+    bgxhofs_write(&IO_BG2VOFS, v, i);
 }
 
 static inline void bg3hofs_write(struct GBA_Core* gba, uint8_t v, uint8_t i)
 {
-    bgxhofs_write(&BG3HOFS, v, i);
+    bgxhofs_write(&IO_BG3HOFS, v, i);
 }
 
 static inline void bg3vofs_write(struct GBA_Core* gba, uint8_t v, uint8_t i)
 {
-    bgxhofs_write(&BG3VOFS, v, i);
+    bgxhofs_write(&IO_BG3VOFS, v, i);
 }
 
 

@@ -1,6 +1,6 @@
 #include "gba.h"
 #include "internal.h"
-
+#include "ppu/ppu.h"
 #include "arm7tdmi/arm7tdmi.h"
 #include "util/string.h"
 
@@ -25,6 +25,7 @@ void GBA_reset(struct GBA_Core* gba)
     memset(gba, 0, sizeof(struct GBA_Core));
 
     ARM7_init(gba);
+    ppu_init(gba);
 }
 
 static void print_header(const struct GBA_CartHeader* header)
@@ -172,6 +173,16 @@ bool GBA_loadrom(struct GBA_Core* gba, const uint8_t* data, size_t rom_size)
     return true;
 }
 
+void GBA_irq(struct GBA_Core* gba, enum InterruptFlag flag)
+{
+    IO_IF.value |= flag;
+}
+
+void GBA_handle_irq(struct GBA_Core* gba, enum InterruptFlag flag)
+{
+    IO_IF.value &= ~flag;
+}
+
 void GBA_run_frame(struct GBA_Core* gba)
 {
     // todo: count cycles!
@@ -184,12 +195,14 @@ void GBA_run_frame(struct GBA_Core* gba)
         {
             c++;
         }
+
         ARM7_run(gba);
+        ppu_run(gba, 1);
 
         if (c > 0)
         GBA_log("  PC: 0x%08X LR: 0x%08X SP: 0x%08X R0: 0x%08X R1: 0x%08X TICKS: %zu Z: %u\n", CPU.registers[15], CPU.registers[14], CPU.registers[13], CPU.registers[0], CPU.registers[1], ticks, CPU.cpsr.Z);
 
-        if (ticks > 196817)
+        if (ticks > 197997)
         {
             assert(0 && "fin");
         }

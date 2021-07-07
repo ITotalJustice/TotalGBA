@@ -54,6 +54,28 @@ void arm_decode(struct GBA_Core* gba, uint32_t opcode)
             arm_bx(gba, opcode);
             break;
 
+    // [4.5]
+        // MOV Logical Left
+        case 0x1A0: case 0x1A1: case 0x1A8: case 0x1B0: case 0x1B1: case 0x1B8:
+            arm_mov_logical_left(arm, opcode);
+            break;
+
+        // // MOV Logical Right
+        // case 0x1A2: case 0x1A3: case 0x1AA: case 0x1B2: case 0x1B3: case 0x1BA:
+        //     break;
+
+        // // MOV Arithmetic Right
+        // case 0x1A4: case 0x1A5: case 0x1AC: case 0x1B4: case 0x1B5: case 0x1BC:
+        //     break;
+
+        // // MOV Rotate Right
+        // case 0x1A6: case 0x1A7: case 0x1AE: case 0x1B6: case 0x1B7: case 0x1BE:
+            break;
+
+        case 0x200 ... 0x21F:
+            arm_and_imm(gba, opcode);
+            break;
+
         case 0x280 ... 0x29F:
             arm_add_imm(gba, opcode);
             break;
@@ -62,12 +84,14 @@ void arm_decode(struct GBA_Core* gba, uint32_t opcode)
             arm_mov_imm(gba, opcode);
             break;
 
+    // []
         case 0x400 ... 0x5FF:
             arm_single_data_imm(gba, opcode);
             break;
 
-        case 0x920:
-            arm_stm(gba, opcode);
+    // [4.11]
+        case 0x800 ... 0x9FF:
+            arm_stm_ldm(gba, opcode);
             break;
 
     // [4.4]
